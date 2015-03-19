@@ -47,6 +47,8 @@ func HandleConnection(conn net.Conn) {
 		buffer = append(buffer, secret...)
 		buffer = pad(buffer)
 
+		fmt.Println("Encrypting", buffer)
+
 		ciphertext := encrypt(buffer, key)
 		encoded := encode(ciphertext)
 		conn.Write(encoded)
@@ -55,7 +57,7 @@ func HandleConnection(conn net.Conn) {
 
 func pad(in []byte) []byte {
 	extra := BlockSize - (len(in) % BlockSize)
-	out := append(in, bytes.Repeat([]byte{'P'}, extra)...)
+	out := append(in, bytes.Repeat([]byte{0}, extra)...)
 	return out
 }
 
